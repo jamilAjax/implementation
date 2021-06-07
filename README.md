@@ -1,5 +1,5 @@
-# PackageSolver :package:  
-PackageSolver is a Java Library project which solves the following packaging problem:  
+# Package Challenge  
+This API solves the following packaging problem:  
   
 >You want to send your friend a package with different things.  
 Each thing you put inside the package has such parameters as index number, weight and cost. The  
@@ -9,11 +9,11 @@ total weight is less than or equal to the package limit and the total cost is as
 That problem matches with the well-known knapsack problem.  
    
   
-### Requirements:memo:  
+### Requirements  
 * JDK 11  
 * Maven 3.6.3
 
-## How to use :computer:
+## How to use 
 Once you have cloned the repository, you can install it on your maven repository by maven command line
 ```bash
 mvn install  
@@ -34,14 +34,14 @@ Use the library by calling pack method
 ```java
 Packer.pack("/input/file/path");
 ```
-## Unit tests execution :satellite:
+## Unit tests execution 
 This library has unit tests built with JUnit 5. They validate logic cases and also exception cases.
 Unit tests can be run by the command
 ```bash
 mvn test  
 ```
-## Aproach :eyeglasses:
-### Algorithm :chart:
+## Aproach 
+
 After research how to solve the knapsack problem, I found one of the best ways is to use dynamic programming. It consists of making a data table where you put the gain of each possible solution. You iterate over the table increasing the knapsack capacity and looking for the best combination for each item of the list. See also [Wikipedia article](https://en.wikipedia.org/wiki/Knapsack_problem).
 
 The dynamic programming solution algorithm was designed to work with integer values, thus I improved it to round floating-point values to BigDecimal values. 
@@ -57,8 +57,6 @@ Also, other algorithms can be implemented, the current structure allows new impl
 
 ### Source code structure :speech_balloon:
 All packages and classes have been defined following *SOLID* principles and separated concerns.
-
-Some Domain-driven Design concepts were used for object naming and testing.
 
 Package list under ``com.mobiquity``
 
