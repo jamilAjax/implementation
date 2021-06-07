@@ -72,13 +72,13 @@ This diagram represents how the library works when is called.
 
 ![sequence](https://github.com/jamilAjax/implementation/blob/master/packageChallenge.png)
 
-### Other decisions :heavy_check_mark:
+### Other decisions 
 
  - Weight and cost are stored as BigDecimal in order to obtain better precision.
  - An exception is thrown if any constraint is not met.
  - TDD practice was used.
 
-## Key libraries and tools :wrench: :hammer:
+## Key libraries and tools 
 
  - **Java** Programming language.
  - **Maven** Build automation tool.
