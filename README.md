@@ -72,7 +72,7 @@ New knapsack solution algorithms can be added by a new class that implements the
 ### How it works :gear:
 This diagram represents how the library works when is called.
 
-![sequence]()
+![sequence](https://github.com/jamilAjax/implementation/blob/master/packageChallenge.png)
 
 ### Other decisions :heavy_check_mark:
 
