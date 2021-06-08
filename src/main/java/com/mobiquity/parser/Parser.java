@@ -1,37 +1,35 @@
-package com.mobiquity.util;
+package com.mobiquity.parser;
 
 import com.mobiquity.entities.Data;
 import com.mobiquity.entities.Item;
 import com.mobiquity.exception.APIException;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Parser {
-    private final String itemRegex = "(?<id>\\d+),(?<weight>\\d+\\.\\d+),\u20AC(?<cost>\\d+)";
-    private final String lineRegex = String.format("(\\d+) : ((\\(%s)\\s*\\)+)", itemRegex);
+    private static final  String ITEMREGEX = "(?<id>\\d+),(?<weight>\\d+\\.\\d+),\u20AC(?<cost>\\d+)";
+    private static final  String ITEMREGEX2 = "(?<id>\\d+),(?<weight>\\d+),\u20AC(?<cost>\\d+)";
+    private final String lineRegex = String.format("(\\d+) : ((\\(%s)\\s*\\)+)", ITEMREGEX);
     private final Pattern linePattern = Pattern.compile(lineRegex);
-    private final Pattern itemPattern = Pattern.compile(itemRegex);
+    private final Pattern itemPattern = Pattern.compile(ITEMREGEX);
+    private final Pattern itemPattern2 = Pattern.compile(ITEMREGEX2);
 
     private static Parser parser;
 
     private Parser() {
     }
 
-    public static Parser getInstance() {
-        if (parser == null) {
-            synchronized (Parser.class) {
-                if (parser == null)
-                    parser = new Parser();
-            }
-        }
+    public static synchronized Parser getInstance() {
+        if (parser == null)
+            parser = new Parser();
         return parser;
     }
 
@@ -40,13 +38,12 @@ public class Parser {
 
         List<Data> data;
         try {
-            data = Files.lines(Paths.get(filePath))
+            data = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)
                     .map(this::lineToData)
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new APIException(e.toString());
         }
-
         return data;
     }
 
@@ -64,9 +61,6 @@ public class Parser {
 
     private Data lineToData(String line) throws APIException {
 
-        if (!this.validateProblemInString(line))
-            throw new APIException(String.format("Can not parse line: %s ", line));
-
         int capacity = getCapacityFromStringData(line);
         List<Item> items = getItemsFromStringData(line);
 
@@ -74,7 +68,7 @@ public class Parser {
     }
 
     private boolean validateProblemInString(String line) {
-        Matcher linetMatcher = linePattern.matcher(line);
+        var linetMatcher = linePattern.matcher(line);
 
         return linetMatcher.find();
     }
@@ -85,11 +79,14 @@ public class Parser {
     }
 
     private List<Item> getItemsFromStringData(String line) {
-        String stringItems = line.split(":")[1];
-        Matcher itemMatcher = itemPattern.matcher(stringItems);
+        var stringItems = line.split(":")[1];
+        var itemMatcher = itemPattern.matcher(stringItems);
+        if (!itemMatcher.find())
+            itemMatcher = itemPattern2.matcher(stringItems);
+
         List<Item> items = new ArrayList<>();
         while (itemMatcher.find()) {
-            Item triplet = new Item(
+            var triplet = new Item(
                     Integer.parseInt(itemMatcher.group("id")),
                     Float.parseFloat(itemMatcher.group("weight")),
                     Integer.parseInt(itemMatcher.group("cost")));

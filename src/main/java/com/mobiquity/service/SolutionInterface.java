@@ -5,7 +5,7 @@ import com.mobiquity.entities.Item;
 
 import java.util.List;
 
-public interface SolveInterface {
+public interface SolutionInterface {
     List<Item> getMaximumItems(Data data);
 
     String getOptimalItemIdsInString(Data data);

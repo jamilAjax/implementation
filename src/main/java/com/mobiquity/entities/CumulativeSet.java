@@ -26,10 +26,10 @@ public class CumulativeSet {
     }
     public boolean exists(Item item){
 
-        boolean found = false;
+        var found = false;
         int cursor= this.getItems().size()-1;
         for (int j= cursor; j >= 0; j--) {
-            Item currItem= this.getItems().get(j);
+            var currItem= this.getItems().get(j);
             if (currItem.equals(item)) {
                 found= true;
                 break;

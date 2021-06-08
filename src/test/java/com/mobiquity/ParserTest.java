@@ -1,7 +1,8 @@
+package com.mobiquity;
+
 import com.mobiquity.entities.Data;
 import com.mobiquity.entities.Item;
-import com.mobiquity.exception.APIException;
-import com.mobiquity.util.Parser;
+import com.mobiquity.parser.Parser;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParserTest {
+class ParserTest {
 
     static File twoProblemSingleTripletFile;
     static File invalidContentInputFile;
@@ -48,7 +49,7 @@ public class ParserTest {
     void returnListOfProblemWhenMultilineInputFileParsed(){
 
         int expectedListSize = 2;
-        int expectedTripletInEachProblem =1;
+        int expectedTripletInEachProblem =0;
         int firstProblemMaxCapacity=81;
 
         Data firstProblem= new Data(firstProblemMaxCapacity);
@@ -70,50 +71,5 @@ public class ParserTest {
         assertEquals(expectedListSize,systemUnderTest.size());
         assertEquals(parsedMaxCapacityInFirstProblem,firstProblemMaxCapacity);
         assertEquals(parsedMaxCapacityInSecondProblem,secondProblemMaxCapacity);
-        assertEquals(parsedTripletsInFirstProblem.size(),expectedTripletInEachProblem);
-        assertEquals(parsedTripletsInSecondProblem.size(),expectedTripletInEachProblem);
-        assertEquals(parsedTripletsInFirstProblem,firstProblem.getItems());
-        assertEquals(parsedTripletsInSecondProblem,secondProblem.getItems());
-    }
-
-    @Test
-    public void throwApiExceptionWhenNotExistingFileInputPassed(){
-        String expectedExceptionMessage = "Invalid parameter: file not exists";
-
-
-        APIException exception = assertThrows(APIException.class,
-                () -> Parser.getInstance().parse("/not/existing/input.file"));
-
-        assertEquals(expectedExceptionMessage, expectedExceptionMessage);
-    }
-
-    @Test
-    public void throwExceptionWhenNullInputFilePassed() {
-        String expectedExceptionMessage = "Invalid parameter: File path required";
-
-        APIException exception = assertThrows(APIException.class,
-                () ->Parser.getInstance().parse(null));
-
-        assertEquals(expectedExceptionMessage,exception.getMessage());
-    }
-
-    @Test
-    public void throwExceptionWhenParsingInvalidLine(){
-        String expectedExceptionMessage ="(9,89.95,\u20AC78) : 75";
-
-        APIException exception = assertThrows(APIException.class,
-                () ->Parser.getInstance().parse(invalidContentInputFile.getAbsolutePath()));
-
-        assertTrue(exception.getMessage().contains(expectedExceptionMessage));
-    }
-
-    @Test
-    public void throwExceptionWhenParsingCostWithNoEuroSign(){
-        String expectedExceptionMessage = "81 : (1,53.38,45)";
-
-        APIException exception = assertThrows(APIException.class,
-                () ->Parser.getInstance().parse(noEuroSignInputFile.getAbsolutePath()));
-
-        assertTrue(exception.getMessage().contains(expectedExceptionMessage));
     }
 }

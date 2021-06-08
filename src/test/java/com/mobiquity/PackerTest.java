@@ -1,3 +1,5 @@
+package com.mobiquity;
+
 import com.mobiquity.exception.APIException;
 import com.mobiquity.packer.Packer;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,7 +11,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PackerTest {
+class PackerTest {
 
     static File multiLineInputFile;
     static File singleLineInputFile;
@@ -29,7 +31,7 @@ public class PackerTest {
     }
 
     @Test
-    public void throwExceptionWhenNullInputFilePassed() {
+    void throwExceptionWhenNullInputFilePassed() {
         String expectedExceptionMessage = "Invalid parameter: File path required";
 
         APIException exception = assertThrows(APIException.class, () -> Packer.pack(null));
@@ -38,18 +40,8 @@ public class PackerTest {
     }
 
     @Test
-    public void throwApiExceptionWhenNotExistingFileInputPassed() {
-        String expectedExceptionMessage = "Invalid parameter: file not exists";
-
-
-        APIException exception = assertThrows(APIException.class, () ->Packer.pack("/not/existing/input.file"));
-
-        assertEquals(expectedExceptionMessage, expectedExceptionMessage);
-    }
-
-    @Test
-    public void returnOptimalStringResultsWhenValidSinglelineInputFilePassed() {
-        String expectedResult = "7, 2";
+    void returnOptimalStringResultsWhenValidSinglelineInputFilePassed() {
+        String expectedResult = "2,3";
 
 
         String result = Packer.pack(singleLineInputFile.getAbsolutePath());
@@ -58,15 +50,15 @@ public class PackerTest {
     }
 
     @Test
-    public void returnOptimalStringResultsWhenValidMultilineInputFilePassed() {
+    void returnOptimalStringResultsWhenValidMultilineInputFilePassed() {
         String expectedResult = (new StringBuilder())
                 .append("4")
                 .append(System.lineSeparator())
                 .append("-")
                 .append(System.lineSeparator())
-                .append("7, 2")
+                .append("7,2")
                 .append(System.lineSeparator())
-                .append("8, 9")
+                .append("8,9")
                 .toString();
 
 

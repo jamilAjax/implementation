@@ -1,4 +1,4 @@
-package com.mobiquity.util;
+package com.mobiquity.formatter;
 
 import java.util.List;
 

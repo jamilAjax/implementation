@@ -4,14 +4,14 @@ import com.mobiquity.entities.Data;
 import com.mobiquity.entities.Item;
 import com.mobiquity.entities.CumulativeSet;
 import com.mobiquity.exception.APIException;
-import com.mobiquity.util.Util;
+import com.mobiquity.commons.Commons;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SolutionConcrete implements SolveInterface{
+public class SolutionConcrete implements SolutionInterface {
     Merger merger;
 
     public static final int MAX_TRIPLET_WEIGHT = 100;
@@ -38,7 +38,7 @@ public class SolutionConcrete implements SolveInterface{
                 .map(String::valueOf)
                 .collect(Collectors.joining(", "));
 
-        return Util.defaultIfEmpty(output, "-");
+        return Commons.defaultIfEmpty(output, "-");
     }
 
     private void validateData(Data data) {
@@ -85,7 +85,7 @@ public class SolutionConcrete implements SolveInterface{
         this.removeOverCapacityTriplets(data);
 
 
-        for (int i = 1; i < data.getItems().size(); i++) {
+        for (var i = 1; i < data.getItems().size(); i++) {
             CumulativeSet currentSet = sets.get(i - 1);
             List<Item> extendedSet = this.extend(currentSet, data.getItems().get(i));
             List<Item> mergedTriplets = merger.merge(currentSet.getItems(), extendedSet);
@@ -98,21 +98,21 @@ public class SolutionConcrete implements SolveInterface{
     private List<Item> findOptimalTripletsInCumulativeSets(Data data, List<CumulativeSet> sets) {
         int lastSetIndex = sets.size() - 1;    
         int lastSetItem = sets.get(lastSetIndex).getItems().size() - 1;    
-        Item lastItem = sets.get(lastSetIndex).getItems().get(lastSetItem);
+        var lastItem = sets.get(lastSetIndex).getItems().get(lastSetItem);
         List<Item> solution = new ArrayList<>();
 
         int cumulativeCost = lastItem.getCost();
         float cumulativeWeight = lastItem.getWeight();
-        Item prevItem = lastItem;
+        var prevItem = lastItem;
 
-        for (int i = lastSetIndex - 1; i >= 0; i--) {
+        for (var i = lastSetIndex - 1; i >= 0; i--) {
             int prevSetIndex = i + 1;
             CumulativeSet currSet = sets.get(i);
             boolean found = currSet.exists(prevItem);
             if (!found) {
                 solution.add(data.getItems().get(prevSetIndex));
                 cumulativeCost -= data.getItems().get(prevSetIndex).getCost();
-                cumulativeWeight = Util.round(cumulativeWeight - data.getItems().get(prevSetIndex).getWeight());
+                cumulativeWeight = Commons.round(cumulativeWeight - data.getItems().get(prevSetIndex).getWeight());
                 prevItem = new Item(cumulativeWeight, cumulativeCost);
             }    
         }
@@ -126,7 +126,7 @@ public class SolutionConcrete implements SolveInterface{
     private List<CumulativeSet> getInitializedCumulativeSets(Data data) {
         List<CumulativeSet> sets = new ArrayList<>();
 
-        CumulativeSet cumulativeSet = new CumulativeSet(data.getMaxCapacity());
+        var cumulativeSet = new CumulativeSet(data.getMaxCapacity());
         cumulativeSet.getItems().add(data.getItems().get(0));
         sets.add(cumulativeSet);
         return sets;
@@ -187,7 +187,7 @@ public class SolutionConcrete implements SolveInterface{
 
             while (arePointersNotTraversedCompletely()) {
                 if (areBothPointersInRange()) {
-                    Item firstItem = this.firstItems.get(firstPointer);
+                    var firstItem = this.firstItems.get(firstPointer);
                     Item secondTriplet = this.secondItems.get(secondPointer);
 
                     if (firstItem.getWeight() < secondTriplet.getWeight()) {
@@ -215,7 +215,7 @@ public class SolutionConcrete implements SolveInterface{
 
         private void addFirstTripletToResultIfNotDominated(List<Item> result) {
             while (firstPointer <= firstMaxIndex) {
-                Item firstItem = firstItems.get(firstPointer);
+                var firstItem = firstItems.get(firstPointer);
                 if (firstItem.getCost() > secondLastItemCost)
                     result.add(firstItem);
                 firstPointer++;
@@ -224,7 +224,7 @@ public class SolutionConcrete implements SolveInterface{
 
         private void addSecondTripletToResultIfNotDominated(List<Item> result) {
             while (secondPointer <= secondMaxIndex) {
-                Item secondItem = secondItems.get(secondPointer);
+                var secondItem = secondItems.get(secondPointer);
                 if (secondItem.getCost() > firstLastItemCost)
                     result.add(secondItem);
                 secondPointer++;
