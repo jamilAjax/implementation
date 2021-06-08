@@ -56,7 +56,7 @@ class PackerTest {
                 .append(System.lineSeparator())
                 .append("-")
                 .append(System.lineSeparator())
-                .append("7,2")
+                .append("2,7")
                 .append(System.lineSeparator())
                 .append("8,9")
                 .toString();

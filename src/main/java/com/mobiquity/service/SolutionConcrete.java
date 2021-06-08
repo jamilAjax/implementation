@@ -15,6 +15,7 @@ public class SolutionConcrete implements SolutionInterface {
     Merger merger;
 
     public static final int MAX_TRIPLET_WEIGHT = 100;
+    public static final int MAX_PACKAGE_WEIGHT = 100;
     public static final int MAX_TRIPLET_COST = 100;
     public static final int MAX_TRIPLETS_SIZE_IN_PROBLEM = 15;
 
@@ -42,9 +43,16 @@ public class SolutionConcrete implements SolutionInterface {
     }
 
     private void validateData(Data data) {
+        this.validatePackageWeight(data);
         this.validateTripletCosts(data);
         this.validateTripletWeights(data);
         this.validateTripletMaxSize(data);
+    }
+
+    private void validatePackageWeight(Data data){
+        if(data.getMaxCapacity()>MAX_PACKAGE_WEIGHT)
+            throw new APIException(
+                    String.format("Invalid problem : Max weight possible is %d", MAX_PACKAGE_WEIGHT));
     }
 
     private void validateTripletMaxSize(Data data) {
